@@ -21,5 +21,59 @@ def word(text):
             run._element.rPr.rFonts.set(qn('w:eastAsia'), run.font.name)
     doc.save("temporary\\text.docx")
 
-with open("input.txt", "r", encoding='utf-8') as f:
-     word(f.readlines())
+def word_to_jpg():
+    from docx2pdf import convert
+    import os
+    from PyPDF2 import PdfFileReader
+    convert("temporary\\text.docx", "temporary\\text.pdf")
+    reader = PdfFileReader("temporary\\text.pdf")
+    if reader.isEncrypted:
+        reader.decrypt('')
+    page = reader.getNumPages()
+    for i in range(page):
+        os.system("mutool draw -o temporary\\text" + str(i + 1) + ".png -w 1998 -h 2585 temporary\\text.pdf " + str(i + 1))
+    return page
+
+def pho_mix(page):
+    import cv2
+    import copy
+    import random as ra
+    background = cv2.imread('background.jpg')
+    offset_x = 30
+    offset_y = 100
+    for num in range(page):
+        word = cv2.imread('temporary\\text' + str(num + 1) + '.png')
+        word = cv2.resize(word, (0, 0), fx = 1.1, fy = 1.2)
+        res = copy.deepcopy(background)
+        print('start ' + str(num + 1))
+        for i in range(len(word)):
+            for j in range(len(word[0])):
+                for k in range(3):
+                    try:
+                        res[i][j][k] = int(res[i][j][k]) * int(word[i - offset_y][j - offset_x][k]) / 255
+                    except:
+                        pass
+        print('finish ' + str(num + 1))
+        rows, cols, channel = res.shape
+        M = cv2.getRotationMatrix2D((cols / 2, rows / 2), ra.random() * 8 - 4, 1.085)
+        res = cv2.warpAffine(res, M, (cols, rows))
+        cv2.imwrite('res\\res' + str(num + 1) + '.jpg', res)
+
+
+def main():
+    with open("input.txt", "r", encoding='utf-8') as f:
+        word(f.readlines())
+    if input("continue?(Y/N)") == "Y":
+        pass
+    else:
+        return
+    pho_mix(word_to_jpg())
+# import cv2
+# h = cv2.imread('hh.png')
+# rows, cols, channel = h.shape
+# M = cv2.getRotationMatrix2D((cols / 2,rows / 2), -4, 1.085)
+# h = cv2.warpAffine(h, M, (cols,rows))
+# cv2.imshow('hh', h)
+# cv2.waitKey(0)
+# word_to_jpg()
+main()
