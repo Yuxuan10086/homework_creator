@@ -45,7 +45,7 @@ def pho_mix(page):
         word = cv2.imread('temporary\\text' + str(num + 1) + '.png')
         word = cv2.resize(word, (0, 0), fx = 1.1, fy = 1.2)
         res = copy.deepcopy(background)
-        print('start ' + str(num + 1))
+        print('start ' + str(num + 1) + '/' + str(page + 1))
         for i in range(len(word)):
             for j in range(len(word[0])):
                 for k in range(3):
@@ -59,8 +59,11 @@ def pho_mix(page):
         res = cv2.warpAffine(res, M, (cols, rows))
         cv2.imwrite('res\\res' + str(num + 1) + '.jpg', res)
 
-
 def main():
+    import os
+    path = os.path.dirname(__file__)
+    for i in os.listdir(path + '\\res'):
+        os.remove('res\\' + i)
     with open("input.txt", "r", encoding='utf-8') as f:
         word(f.readlines())
     if input("continue?(Y/N)") == "Y":
@@ -68,12 +71,8 @@ def main():
     else:
         return
     pho_mix(word_to_jpg())
-# import cv2
-# h = cv2.imread('hh.png')
-# rows, cols, channel = h.shape
-# M = cv2.getRotationMatrix2D((cols / 2,rows / 2), -4, 1.085)
-# h = cv2.warpAffine(h, M, (cols,rows))
-# cv2.imshow('hh', h)
-# cv2.waitKey(0)
-# word_to_jpg()
-main()
+    for i in os.listdir(path + '\\temporary'):
+        os.remove('temporary\\'+ i)
+
+if __name__=='__main__':
+    main()
