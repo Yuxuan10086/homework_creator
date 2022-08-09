@@ -10,7 +10,9 @@ def word(text):
     from docx import Document
     from docx.oxml.ns import qn
     from docx.shared import RGBColor
-    
+    import random
+
+    rand = int(random.random() * 200 - 100)
     font = ["萌妹子体", "李国夫手写体", "陈静的字完整版"]
     doc = Document()
     para = doc.add_paragraph(" ")
@@ -18,9 +20,10 @@ def word(text):
         for i in line:
             run = para.add_run(i)
             run.font.name = rand_select(font)
-            run.font.size = 300000
+            run.font.size = 300000 + rand
             run.font.color.rgb = RGBColor(60, 60, 60)
             run._element.rPr.rFonts.set(qn('w:eastAsia'), run.font.name)
+            rand = int(random.random() * 200 - 100)
     doc.save(os.path.split(os.path.realpath(__file__))[0] + "\\temporary\\text.docx")
 
 def word_to_jpg():
