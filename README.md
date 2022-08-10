@@ -26,6 +26,7 @@
 
 1. 在`input.txt`文件中输入要转换的文本
 1. 如果程序目录下没有`temporary`文件夹则自行新建
+1. 如果程序目录下没有`res`文件夹则自行新建
 1. 在程序目录下输入以下命令
 
         python homework_creator.py
