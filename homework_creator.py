@@ -6,6 +6,10 @@ def rand_select(option):
         if rand < 1 / len(option) * (i + 1):
             return option[i]
 
+def create_dir(dir_path):
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
 def word(text):
     from docx import Document
     from docx.oxml.ns import qn
@@ -67,6 +71,8 @@ def pho_mix(page):
 def main():
     
     path = os.path.split(os.path.realpath(__file__))[0]
+    create_dir(path + '\\res')
+    create_dir(path + '\\temporary')
     for i in os.listdir(path + '\\res'):
         os.remove(path + '\\res\\' + i)
     with open(path + "\\input.txt", "r", encoding='utf-8') as f:
