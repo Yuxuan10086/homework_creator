@@ -77,9 +77,7 @@ def main():
         os.remove(path + '\\res\\' + i)
     with open(path + "\\input.txt", "r", encoding='utf-8') as f:
         word(f.readlines())
-    if input("continue?(Y/N)") == "Y":
-        pass
-    else:
+    if input("continue?(Y/N)") not in {'Y', 'y', 'Yes', 'yes', ''}:
         return
     pho_mix(word_to_jpg())
     for i in os.listdir(path + '\\temporary'):
