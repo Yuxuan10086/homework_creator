@@ -33,12 +33,12 @@ def word(text):
 def word_to_jpg():
     from docx2pdf import convert
     
-    from PyPDF2 import PdfFileReader
+    from PyPDF2 import PdfReader
     convert(os.path.split(os.path.realpath(__file__))[0] + "\\temporary\\text.docx", os.path.split(os.path.realpath(__file__))[0] + "\\temporary\\text.pdf")
-    reader = PdfFileReader(os.path.split(os.path.realpath(__file__))[0] + "\\temporary\\text.pdf")
-    if reader.isEncrypted:
+    reader = PdfReader(os.path.split(os.path.realpath(__file__))[0] + "\\temporary\\text.pdf")
+    if reader.is_encrypted:
         reader.decrypt('')
-    page = reader.getNumPages()
+    page = len(reader.pages)
     for i in range(page):
         os.system(os.path.split(os.path.realpath(__file__))[0] + "\\mutool.exe draw -o " + os.path.split(os.path.realpath(__file__))[0] + "\\temporary\\text" + str(i + 1) + ".png -w 1998 -h 2585 " + os.path.split(os.path.realpath(__file__))[0] + "\\temporary\\text.pdf " + str(i + 1))
     return page
